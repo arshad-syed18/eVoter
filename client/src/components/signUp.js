@@ -30,10 +30,12 @@ export default function SignUp() {
 
   const [nameError, setNameError] = React.useState(false);
   const [voterIDError, setvoterIDError] = React.useState(false);
-  const [emailError, setEmailError] = React.useState(false)
-  const [passwordError, setPasswordError] = React.useState(false)
-  const [DOBError, setDOBError] = React.useState(false)
+  const [emailError, setEmailError] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState(false);
+  const [DOBError, setDOBError] = React.useState(false);
+  const [nationalityError, setNationalityError] = React.useState('');
   const [nationality, setNationality] = React.useState('');
+  const [PhoneNumberError, setPhoneNumberError] = React.useState(false)
 
   const handleChange = (event) => {
     setNationality(event.target.value);
@@ -42,15 +44,20 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setNameError(false)
-    setvoterIDError(false)
-    setEmailError(false)
-    setPasswordError(false)
-    setDOBError(false)
-    if(data.get('Name') === ''){
-      setNameError(true);
-
-    }
+    setNameError(false);
+    setvoterIDError(false);
+    setEmailError(false);
+    setPasswordError(false);
+    setDOBError(false);
+    setPhoneNumberError(false);
+    setNationalityError(false);
+    if(data.get('Name') === ''){setNameError(true);}
+    if(data.get('voterID') === ''){setvoterIDError(true);}
+    if(data.get('email') === ''){setEmailError(true);}
+    if(data.get('password') === ''){setPasswordError(true);}
+    if(data.get('DateOfBirth') === ''){setDOBError(true);}
+    if(nationality === ''){setNationalityError(true);}
+    if(data.get('PhoneNumber') === ''){setPhoneNumberError(true);}
     //TODO add error checking here and then push to node js
 
     console.log({
@@ -107,6 +114,17 @@ export default function SignUp() {
                   helperText={voterIDError ? "Please enter your voterID" : ''}
                 />
               </Grid>
+              <Grid item xs={12} >
+                <TextField
+                  required
+                  fullWidth
+                  id="PhoneNumber"
+                  label="Phone Number"
+                  name="PhoneNumber"
+                  error={PhoneNumberError}
+                  helperText={PhoneNumberError ? "Please enter your Phone Number" : ''}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -151,6 +169,8 @@ export default function SignUp() {
                     id="demo-simple-select"
                     value={nationality}
                     label="Nationality"
+                    error={nationalityError}
+                    helperText={nationalityError ? "Please select your nationality" : ''}
                     onChange={handleChange}
                   >
                     <MenuItem value="Indian">Indian</MenuItem>
