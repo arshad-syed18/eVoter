@@ -22,6 +22,7 @@ import Axios from 'axios';
 
 
 const theme = createTheme();
+
 const styles = {
   heroContainer: {
     backgroundImage: `url(${BgImage})`,
@@ -62,6 +63,11 @@ function validateDOB(Dob){
   if(regex.test(Dob)){return false;}
   else return true;
 }
+function getAge(dateString) {
+  var newdate = dateString.split("/").reverse().join("-");
+  var birthday = +new Date(newdate);
+  return ~~((Date.now() - birthday) / (31557600000));
+}
 
 export default function SignUp() {
   let history = useNavigate()
@@ -80,7 +86,7 @@ export default function SignUp() {
   const [nationality, setNationality] = React.useState('');
   const [PhoneNumberError, setPhoneNumberError] = React.useState(false)
 
-
+  // check for errors in each field
   const errorCheck = (data) =>{
     if(validateName(data.get('Name'))){setNameError(true);}
     if(validateVoterID(data.get('voterID'))){setvoterIDError(true);}
@@ -124,15 +130,39 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
     errorCheck(data);
     //TODO add error checking here and then push to node js
-    
     // Axios.post()
+    if(flag === true){
+      let userData = {
+        voterID: data.get('voterID'),
+        name: data.get('Name'),
+        phone: data.get('PhoneNumber'),
+        email: data.get('email'),
+        password: data.get('password'),
+        age: getAge(data.get('DateOfBirth')),
+        dob: data.get('DateOfBirth'),
+        nationality: nationality
+      }
+      console.log(userData);
+      Axios.post("http://localhost:3001/api/addUser", userData)
+        .then((res) => {
+          console.log(res.json);console.log("Congrats!");
+        })
+        .catch((err) => {
+          if(err.response) {
+            let errorMessage = err.response.data;
+            console.log(errorMessage);
+            if(errorMessage.errorr.errno === 1062){
+              console.log("Duplicate entry!");
+              alert("User already exists! Please try logging in!");
+            }
+            else{
+              console.log(errorMessage.errorr.code);
+              console.log("Unknown error occured! Please check for code %s", errorMessage.errorr.code);
+            }
+          }
+        });
 
-    console.log({
-      name: data.get('Name'),
-      voterID: data.get('voterID'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    }
   };
 
 
