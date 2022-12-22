@@ -15,9 +15,21 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
-
+import '@fontsource/roboto/400.css'
+import BgImage from '../assets/signUpBg.jpg'; 
 
 const theme = createTheme();
+const styles = {
+  heroContainer: {
+    height: 800,
+    backgroundImage: `url(${BgImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    width: `calc(100vw + 48px)`,
+    margin: -24,
+    padding: 24,
+  }
+ };
 
 
 export default function SignUp() {
@@ -39,6 +51,7 @@ export default function SignUp() {
 
   const handleChange = (event) => {
     setNationality(event.target.value);
+    setNationalityError(false);
   };
 
   const handleSubmit = (event) => {
@@ -70,13 +83,19 @@ export default function SignUp() {
 
 
   return (
+    <Grid
+    container
+    direction="column"
+    justify="flex-end"
+    alignItems="right"
+    style={styles.heroContainer} >
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs" >
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
       
         <Box
           sx={{
-            marginTop: 8,
+            marginBottom: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -100,6 +119,7 @@ export default function SignUp() {
                   label="Name"
                   autoFocus
                   error={nameError}
+                  onChange={() => setNameError(false)}
                   helperText={nameError ? "Please enter your name" : ''}
                 />
               </Grid>
@@ -111,6 +131,7 @@ export default function SignUp() {
                   label="Voter ID"
                   name="voterID"
                   error={voterIDError}
+                  onChange={() => setvoterIDError(false)}
                   helperText={voterIDError ? "Please enter your voterID" : ''}
                 />
               </Grid>
@@ -122,6 +143,7 @@ export default function SignUp() {
                   label="Phone Number"
                   name="PhoneNumber"
                   error={PhoneNumberError}
+                  onChange={() => setPhoneNumberError(false)}
                   helperText={PhoneNumberError ? "Please enter your Phone Number" : ''}
                 />
               </Grid>
@@ -134,6 +156,7 @@ export default function SignUp() {
                   name="email"
                   autoComplete="email"
                   error={emailError}
+                  onChange={() => setEmailError(false)}
                   helperText={emailError ? "Please enter your email" : ''}
                 />
               </Grid>
@@ -147,6 +170,7 @@ export default function SignUp() {
                   id="password"
                   autoComplete="new-password"
                   error={passwordError}
+                  onChange={() => setPasswordError(false)}
                   helperText={passwordError ? "Please enter a password between 6-16 characters" : ''}
                 />
               </Grid>
@@ -158,6 +182,7 @@ export default function SignUp() {
                 label="Date Of Birth"
                 id="DateOfBirth"
                 error={DOBError}
+                onChange={() => setDOBError(false)}
                 helperText={DOBError ? "Please enter your dob in DD/MM/YYYY format" : ''}
                 />
               </Grid>
@@ -198,5 +223,6 @@ export default function SignUp() {
         </Box>
       </Container>
     </ThemeProvider>
+    </Grid>
   );
 }
