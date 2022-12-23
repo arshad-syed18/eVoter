@@ -145,7 +145,7 @@ export default function SignUp() {
       console.log(userData);
       Axios.post("http://localhost:3001/api/addUser", userData)
         .then((res) => {
-          console.log(res.json);console.log("Congrats!");
+          console.log("Congrats! Registration successful!");
         })
         .catch((err) => {
           if(err.response) {
@@ -157,7 +157,7 @@ export default function SignUp() {
             }
             else{
               console.log(errorMessage.errorr.code);
-              console.log("Unknown error occured! Please check for code %s", errorMessage.errorr.code);
+              console.log("user email already registered!Please see %s", errorMessage.errorr.code);
             }
           }
         });

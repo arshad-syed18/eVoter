@@ -52,6 +52,30 @@ app.post('/api/addUser',(req,res) => {
     });
     
 });
+app.post('/api/getUser',(req,res) => {
+    // get data from front end
+    const email = req.body.email;
+    const password = req.body.password;
+    console.log(email)
+    console.log(password)
+    let sqlQuery = "select password from user where email=?";
+    let sqlPasswordAns = db.query(sqlQuery,email, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log(result);
+        if(result[0].password === password){
+            console.log("Congrats password matches!");
+            res.status(200).send("Password matches!")
+        }
+        else {
+            console.log("password did not match!");
+            res.status(404).send("Password did not match!")
+        }
+    });
+    
+})
 
 app.get("/",(req,res)=>{
     res.send("Hey! Welcome to backend!");

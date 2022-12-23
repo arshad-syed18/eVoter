@@ -13,37 +13,59 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
 import BgImage from '../assets/loginImage.jpg';
 import '@fontsource/roboto/400.css'
+import Axios from 'axios';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+let flag=false;
+
+function validateEmail(email){
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  if (email.match(validRegex)) { return false;} 
+  else {flag=true; return true;}
+ }
+ function validatePassword(passwd){
+  let p = passwd;
+  if(p.length>5){return false;}
+  else return true;
 }
 
 const theme = createTheme();
 
 export default function Login() {
   let history = useNavigate()
-
   // Navigate to Signup
   function goTosignUp(){
     history("/signUp")
   }
+  const [emailError, setEmailError] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    if(validateEmail(data.get('email'))){setEmailError(true);}
+    if(validatePassword(data.get('password'))){setPasswordError(true);}
+    if(!validateEmail(data.get('email')) && !validatePassword(data.get('password'))){
+      console.log("Congrats! All fields correctly entered!");
+      flag=true;
+    }
+    if(flag===true){
+      let userData = {
+        email: data.get('email'),
+        password: data.get('password')
+      }
+      console.log(userData);
+      Axios.post("http://localhost:3001/api/getUser", userData)
+      .then((res) => {
+        console.log("Congrats, Password correctly entered!");
+      })
+      .catch((err) => {
+        if(err.response) {
+          let errorMessage = err.response.data;
+          console.log(errorMessage);
+          setPasswordError(true);
+        }
+      });
+    }
   };
 
   return (
@@ -93,6 +115,9 @@ export default function Login() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={emailError}
+                onChange={() => setEmailError(false)}
+                helperText={emailError ? "Please enter a valid email" : ''}
               />
               <TextField
                 margin="normal"
@@ -103,6 +128,9 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={passwordError}
+                onChange={() => setPasswordError(false)}
+                helperText={passwordError ? "Please enter the correct password!" : ''}
               />
               <Button
                 type="submit"
@@ -124,7 +152,6 @@ export default function Login() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>
