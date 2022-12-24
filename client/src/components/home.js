@@ -13,7 +13,6 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -27,7 +26,6 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import Logout from '@mui/icons-material/Logout';
-
 
 
 const drawerWidth = 240;
@@ -84,7 +82,7 @@ function DashboardContent() {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [pageTitle, setPageTitle] = React.useState('Active Elections')
-  const navigate=useNavigate();
+
     // Below is code to switch pages
     function switchPages() {
         switch (page) {
@@ -117,7 +115,7 @@ function DashboardContent() {
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={navigate('/')}
+              onClick={toggleDrawer}
               sx={{
                 marginRight: '36px',
                 ...(open && { display: 'none' }),
@@ -140,7 +138,7 @@ function DashboardContent() {
                 color="inherit"
                 aria-label="open drawer"
                 size='large'
-                onClick={toggleDrawer}
+                onClick={console.log("need to do laterlogout")}
                 sx={{
                   marginRight: '36px',
                 }}
@@ -216,9 +214,9 @@ function DashboardContent() {
                     flexDirection: 'column',
                   }}
                 >
-                    <p className='two'>
+                    <div className='two'>
                         <h1>Here are the currently active elections</h1>
-                    </p>
+                    </div>
                     {/* Below function switches pages based on click input from navbar */}
                     {switchPages()}
                 </Paper>

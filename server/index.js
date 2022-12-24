@@ -53,6 +53,17 @@ app.post('/api/addUser',(req,res) => {
     });
     
 });
+app.get('/api/getElections',(req,res) => {
+    let sqlQuery = "select * from election";
+    let ans = db.query(sqlQuery, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Data fetched successfully!")
+        res.send(result);
+    });
+});
 app.post('/api/getUser',(req,res) => {
     // get data from front end
     const email = req.body.email;
