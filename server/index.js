@@ -26,6 +26,7 @@ const handleErrors = (err) => {
 //connect to database
 db.connect((err)=>{
     if(err){
+        console.log("Activate Xampp server!");
         throw err;
     }
     console.log("Connection to database established!");
