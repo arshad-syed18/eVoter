@@ -1,3 +1,41 @@
 .App {
   text-align: center;
 }
+.textHeading {
+  font-size: large;
+  text-align: justify;
+  font-weight: 600;
+  background-image: linear-gradient(to left, #553c9a, #b393d3);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+.two h1 {
+  text-transform: capitalize;
+  text-align: justify;
+}
+.two h1:before {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 2px;
+  content: "";
+  background-color: #c50000;
+}
+
+.two h1 span {
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  line-height: 3em;
+  padding-left: 0.25em;
+  color: rgba(0, 0, 0, 0.4);
+  padding-bottom: 10px;
+}
+.alt-two h1 {
+  text-align:center;
+}
+.alt-two h1:before {
+  left:50%; margin-left:-30px;
+}

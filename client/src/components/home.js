@@ -13,10 +13,20 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems} from './listItems';
-import {electionList} from './ActiveElections';
-
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ActiveElections from './ActiveElections'
+import AboutCandidates from './AboutCandidates';
+import PreviousElections from './PreviousElections';
+import UserProfile from './UserProfile';
+import BallotIcon from '@mui/icons-material/Ballot';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import GroupsIcon from '@mui/icons-material/Groups';
+import Logout from '@mui/icons-material/Logout';
 
 
 
@@ -66,11 +76,30 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+
 const mdTheme = createTheme();
 
 // Below is the main component for home
 function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+  const [page, setPage] = React.useState(0);
+  const [pageTitle, setPageTitle] = React.useState('Active Elections')
+  const navigate=useNavigate();
+    // Below is code to switch pages
+    function switchPages() {
+        switch (page) {
+            case 0:
+                return <ActiveElections />;
+            case 1:
+                return <AboutCandidates />;
+            case 2:
+                return  <PreviousElections />;
+            case 3:
+                return <UserProfile />;
+            default:
+                return <ActiveElections />;
+        }
+    }
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -88,7 +117,7 @@ function DashboardContent() {
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={toggleDrawer}
+              onClick={navigate('/')}
               sx={{
                 marginRight: '36px',
                 ...(open && { display: 'none' }),
@@ -104,8 +133,20 @@ function DashboardContent() {
               sx={{ flexGrow: 1 }}
               align="justify"
             >
-              Active Elections
+              {pageTitle}
             </Typography>
+            <IconButton
+                edge="end"
+                color="inherit"
+                aria-label="open drawer"
+                size='large'
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: '36px',
+                }}
+            >
+                <Logout />
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -122,9 +163,32 @@ function DashboardContent() {
             </IconButton>
           </Toolbar>
           <Divider />
-          {/*list items here*/}
+          {/*list items here that show in navbar three dash one*/}
           <List component="nav">    
-            {mainListItems}
+            <ListItemButton onClick={() => {console.log("Active Elections clicked!");setPage(0);setPageTitle('Active Elections');}}>
+                <ListItemIcon>
+                    <BallotIcon />
+                </ListItemIcon>
+                <ListItemText primary="Active Elections" />
+            </ListItemButton>
+            <ListItemButton onClick={() => {console.log("About Candidates clicked!");setPage(1);setPageTitle('About Candidates');}}>
+                <ListItemIcon>
+                    <GroupsIcon />
+                </ListItemIcon>
+                <ListItemText primary="About Candidates" />
+            </ListItemButton>
+            <ListItemButton onClick={() => {console.log("Previous Elections clicked!");setPage(2);setPageTitle('Previous Elections');}}>
+                <ListItemIcon>
+                    <FactCheckIcon />
+                </ListItemIcon>
+                <ListItemText primary="Previous Elections" />
+            </ListItemButton>
+            <ListItemButton onClick={() => {console.log("User Profile clicked!");setPage(3);setPageTitle('User Profile');}}>
+                <ListItemIcon>
+                    <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="User Profile" />
+            </ListItemButton>
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>
@@ -150,13 +214,13 @@ function DashboardContent() {
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 240,
                   }}
                 >
-                    <Typography variant="h6" component="h6" align='left'>
-                    Here are the currently active elections
-                    </Typography>;
-                    {electionList}
+                    <p className='two'>
+                        <h1>Here are the currently active elections</h1>
+                    </p>
+                    {/* Below function switches pages based on click input from navbar */}
+                    {switchPages()}
                 </Paper>
               </Grid>
             </Grid>

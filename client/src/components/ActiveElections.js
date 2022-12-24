@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ListItemText from '@mui/material/ListItemText';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -22,10 +21,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
-    // '&:last-child td, &:last-child th': {
-    //   border: 0,
-    // },
 }));
   
 function createData(name, startDate, endDate, positionName, description) {
@@ -33,6 +28,7 @@ function createData(name, startDate, endDate, positionName, description) {
 }
   
 const rows = [
+    createData('First Elections','2022-11-01', '2022-12-01', 'MLA', 'This election is for MLA position in ABX District, Bangalore'),
     createData('First Elections','2022-11-01', '2022-12-01', 'MLA', 'This election is for MLA position in ABX District, Bangalore'),
     createData('First Elections','2022-11-01', '2022-12-01', 'MLA', 'This election is for MLA position in ABX District, Bangalore'),
 ];
@@ -78,3 +74,6 @@ export const electionList = (
     </React.Fragment>
   );
   
+  export default function ActiveElections(){
+    return electionList
+  }
