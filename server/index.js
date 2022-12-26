@@ -53,14 +53,39 @@ app.post('/api/addUser',(req,res) => {
     });
     
 });
-app.get('/api/getElections',(req,res) => {
-    let sqlQuery = "select * from election";
+app.get('/api/getActiveElections',(req,res) => {
+    var todayDate = new Date().toISOString().slice(0, 10);
+    let sqlQuery = "select * from election where endDate > ?";
+    let ans = db.query(sqlQuery,todayDate, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Active Election Data fetched successfully!")
+        res.send(result);
+    });
+});
+app.get('/api/getPreviousElections',(req,res) => {
+    var todayDate = new Date().toISOString().slice(0, 10);
+    console.log(todayDate);
+    let sqlQuery = "select * from election where endDate < ?";
+    let ans = db.query(sqlQuery,todayDate, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Previous Election Data fetched successfully!")
+        res.send(result);
+    });
+});
+app.get('/api/getCandidates',(req,res) => {
+    let sqlQuery = "select * from candidate";
     let ans = db.query(sqlQuery, (err,result) => {
         if(err!=null){
             console.log(err);
             res.status(404).send("Error!");
         }
-        console.log("Data fetched successfully!")
+        console.log("Candidate Data fetched successfully!");
         res.send(result);
     });
 });

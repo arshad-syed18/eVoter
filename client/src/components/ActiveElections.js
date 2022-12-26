@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Link } from '@mui/material';
+import { Alert, Link } from '@mui/material';
 import Axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -26,11 +26,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const borderdata = {borderBottom: 1,borderRight:1, borderColor: 'gray'}
-
 export default function ActiveElections(){
   const [rows,setRows] =React.useState([])
   React.useEffect(() => {
-    Axios.get("http://localhost:3001/api/getElections")
+
+      Axios.get("http://localhost:3001/api/getActiveElections")
         .then((res) => {
           console.log(res.data);
           setRows(res.data);
@@ -42,8 +42,16 @@ export default function ActiveElections(){
           }
         });
   }, []);
+  if(rows.length === 0){
+    return(
+    <Alert variant='filled' severity='error'>There are no Currently Active Elections! </Alert>
+    );
+  }
   return(
     <div className='electionTable'>
+      <div className='two'>
+                        <h1>Here are the currently active elections</h1>
+                    </div>
       <TableContainer component={Paper}>
         <Table stickyHeader sx={{minWidth: 700}} aria-label="Elections">
           <TableHead>

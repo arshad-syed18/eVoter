@@ -26,6 +26,7 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import Logout from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
 
 const drawerWidth = 240;
@@ -82,6 +83,7 @@ function DashboardContent() {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [pageTitle, setPageTitle] = React.useState('Active Elections')
+  const navigate = useNavigate();
 
     // Below is code to switch pages
     function switchPages() {
@@ -134,14 +136,7 @@ function DashboardContent() {
               {pageTitle}
             </Typography>
             <IconButton
-                edge="end"
-                color="inherit"
-                aria-label="open drawer"
-                size='large'
-                onClick={console.log("need to do laterlogout")}
-                sx={{
-                  marginRight: '36px',
-                }}
+            onClick={() => {navigate('/')}}
             >
                 <Logout />
             </IconButton>
@@ -214,9 +209,6 @@ function DashboardContent() {
                     flexDirection: 'column',
                   }}
                 >
-                    <div className='two'>
-                        <h1>Here are the currently active elections</h1>
-                    </div>
                     {/* Below function switches pages based on click input from navbar */}
                     {switchPages()}
                 </Paper>

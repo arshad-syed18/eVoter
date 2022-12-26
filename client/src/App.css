@@ -12,6 +12,7 @@
 .two h1 {
   text-transform: capitalize;
   text-align: justify;
+  font-size: x-large;
 }
 .two h1:before {
   position: absolute;
