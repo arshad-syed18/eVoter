@@ -4,6 +4,7 @@ import Login from'./components/login';
 import SignUp from './components/signUp';
 import Home from './components/home';
 import VotesPage from './components/VotesPage';
+import ErrorPage from './components/ErrorPage';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 function App() {
   console.log("Hello world");
@@ -15,6 +16,7 @@ function App() {
           <Route path="/signUp" element={<SignUp  />} /> 
           <Route path="/home" element={<Home />} />
           <Route path="/vote" element={<VotesPage />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes> 
       </Router>
     </div>

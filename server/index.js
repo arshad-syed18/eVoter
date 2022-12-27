@@ -89,6 +89,20 @@ app.get('/api/getCandidates',(req,res) => {
         res.send(result);
     });
 });
+app.post('/api/getUserDetails',(req,res) => {
+    const email = req.body.email;
+    console.log(req.body);
+    let sqlQuery = "select * from user where email=?";
+    console.log(sqlQuery,email)
+    let ans = db.query(sqlQuery,email, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("User Data fetched successfully!");
+        res.send(result);
+    });
+});
 app.post('/api/getUser',(req,res) => {
     // get data from front end
     const email = req.body.email;

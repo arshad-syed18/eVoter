@@ -29,8 +29,7 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     width: `calc(100vw + 48px)`,
-    margin: -24,
-    padding: 24,
+    padding: 40,
   }
 };
 let flag = false; // Flag used to check if everything is validated
