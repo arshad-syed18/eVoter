@@ -69,10 +69,10 @@ function getAge(dateString) {
 }
 
 export default function SignUp() {
-  let history = useNavigate()
+  let navigate = useNavigate()
   // Navigate to Signup
   function goTologin(){
-    history("/")
+    navigate("/")
   }
 
 
@@ -132,19 +132,20 @@ export default function SignUp() {
     // Axios.post()
     if(flag === true){
       let userData = {
-        voterID: data.get('voterID'),
+        voter_id: data.get('voterID'),
         name: data.get('Name'),
-        phone: data.get('PhoneNumber'),
+        phoneNumber: data.get('PhoneNumber'),
         email: data.get('email'),
         password: data.get('password'),
         age: getAge(data.get('DateOfBirth')),
-        dob: data.get('DateOfBirth'),
+        DOB: data.get('DateOfBirth'),
         nationality: nationality
       }
       console.log(userData);
       Axios.post("http://localhost:3001/api/addUser", userData)
         .then((res) => {
           console.log("Congrats! Registration successful!");
+          navigate("/home", {state : userData});
         })
         .catch((err) => {
           if(err.response) {

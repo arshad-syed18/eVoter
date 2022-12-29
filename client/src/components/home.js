@@ -26,7 +26,7 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import Logout from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const drawerWidth = 240;
@@ -84,6 +84,15 @@ function DashboardContent() {
   const [page, setPage] = React.useState(0);
   const [pageTitle, setPageTitle] = React.useState('Active Elections')
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location.state);
+  
+    React.useEffect(() => {
+      if(location.state == null){
+        console.log('Error!');
+      navigate("/");
+    }
+    }, []);
 
     // Below is code to switch pages
     function switchPages() {

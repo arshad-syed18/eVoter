@@ -34,22 +34,24 @@ db.connect((err)=>{
 
 app.post('/api/addUser',(req,res) => {
     // get data from frontend
-    const voter_id = req.body.voterID;
+    const voter_id = req.body.voter_id;
     const name = req.body.name;
-    const phoneNumber = req.body.phone;
+    const phoneNumber = req.body.phoneNumber;
     const email = req.body.email;
     const password = req.body.password;
     const age = req.body.age;
-    const dob = req.body.dob;
+    const dob = req.body.DOB;
     const nationality = req.body.nationality;
     //query data to sql
     const sqlInsert = "INSERT INTO user (voter_id,name,phoneNumber,email,password,age,DOB,nationality) VALUES (?,?,?,?,?,?,?,?)"
     db.query(sqlInsert,[voter_id,name,phoneNumber, email, password, age, dob, nationality], (err, result) => {
         console.log(err);
         if(err != null)
-        {const errorr = handleErrors(err);//if error, get error details and send to front end
-        res.status(404).send({errorr});}
-        console.log(result);
+        {
+            const errorr = handleErrors(err);//if error, get error details and send to front end
+            res.status(404).send({errorr});
+        }
+        res.send();
     });
     
 });
@@ -93,13 +95,13 @@ app.post('/api/getUserDetails',(req,res) => {
     const email = req.body.email;
     console.log(req.body);
     let sqlQuery = "select * from user where email=?";
-    console.log(sqlQuery,email)
     let ans = db.query(sqlQuery,email, (err,result) => {
         if(err!=null){
             console.log(err);
             res.status(404).send("Error!");
         }
         console.log("User Data fetched successfully!");
+        console.log(result)
         res.send(result);
     });
 });
@@ -107,8 +109,6 @@ app.post('/api/getUser',(req,res) => {
     // get data from front end
     const email = req.body.email;
     const password = req.body.password;
-    console.log(email)
-    console.log(password)
     let sqlQuery = "select password from user where email=?";
     let sqlPasswordAns = db.query(sqlQuery,email, (err,result) => {
         if(err!=null){

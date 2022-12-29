@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import BgImage from '../assets/loginImage.jpg';
 import '@fontsource/roboto/400.css'
 import Axios from 'axios';
@@ -31,10 +31,10 @@ function validateEmail(email){
 const theme = createTheme();
 
 export default function Login() {
-  let history = useNavigate()
+  let navigate = useNavigate()
   // Navigate to Signup
   function goTosignUp(){
-    history("/signUp")
+    navigate("/signUp")
   }
   const [emailError, setEmailError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
@@ -53,10 +53,24 @@ export default function Login() {
         email: data.get('email'),
         password: data.get('password')
       }
+      const e = {email: "arshad18syed@gmail.com"};
       console.log(userData);
       Axios.post("http://localhost:3001/api/getUser", userData)
       .then((res) => {
         console.log("Congrats, Password correctly entered!");
+        // Get user details then send to home page
+        Axios.post("http://localhost:3001/api/getUserDetails", e)
+        .then((res) => {
+        console.log("Congrats, details are here!");
+        navigate("/home")
+        })
+        .catch((err) => {
+        if(err.response) {
+          let errorMessage = err.response.data;
+          console.log(errorMessage);
+        }
+        });
+       
       })
       .catch((err) => {
         if(err.response) {
