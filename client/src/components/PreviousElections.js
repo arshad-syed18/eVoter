@@ -26,14 +26,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const borderdata = {borderBottom: 1,borderRight:1, borderColor: 'gray'}
-const checkNull = (data) => {
-    console.log(data);
-    if(data === 0)
-        return "Results to be declared!";
-    else return data;
-}
+
+
 export default function PreviousElections(){
-    const [rows,setRows] =React.useState([])
+    const [rows,setRows] =React.useState([]);
   React.useEffect(() => {
 
       Axios.get("http://localhost:3001/api/getPreviousElections")
@@ -80,7 +76,7 @@ export default function PreviousElections(){
                 <StyledTableCell align='justify' sx={borderdata}>{row.endDate.split('T')[0]}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.positionName}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.Description}</StyledTableCell>
-                <StyledTableCell align='justify' sx={borderdata}>{checkNull(row.victor)}</StyledTableCell>
+                <StyledTableCell align='justify' sx={borderdata}>{row.victor}</StyledTableCell>
               </StyledTableRow>
                         
             ))}

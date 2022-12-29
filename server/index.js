@@ -69,7 +69,7 @@ app.get('/api/getActiveElections',(req,res) => {
 });
 app.get('/api/getPreviousElections',(req,res) => {
     var todayDate = new Date().toISOString().slice(0, 10);
-    console.log(todayDate);
+    var victors
     let sqlQuery = "select * from election where endDate < ?";
     let ans = db.query(sqlQuery,todayDate, (err,result) => {
         if(err!=null){
@@ -77,6 +77,7 @@ app.get('/api/getPreviousElections',(req,res) => {
             res.status(404).send("Error!");
         }
         console.log("Previous Election Data fetched successfully!")
+        //console.log(result);
         res.send(result);
     });
 });
@@ -88,6 +89,18 @@ app.get('/api/getCandidates',(req,res) => {
             res.status(404).send("Error!");
         }
         console.log("Candidate Data fetched successfully!");
+        res.send(result);
+    });
+});
+app.post('/api/getVictor',(req,res) => {
+    const candidate_id = req.body.candidate_id;
+    let sqlQuery = "select * from candidate where candidate_id=?";
+    let ans = db.query(sqlQuery,candidate_id, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Victor Data fetched successfully!");
         res.send(result);
     });
 });
