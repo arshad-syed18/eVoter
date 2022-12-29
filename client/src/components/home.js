@@ -27,7 +27,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import Logout from '@mui/icons-material/Logout';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import VotesPage from './VotesPage';
 
 const drawerWidth = 240;
 
@@ -82,29 +82,38 @@ const mdTheme = createTheme();
 function DashboardContent() {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
-  const [pageTitle, setPageTitle] = React.useState('Active Elections')
+  const [pageTitle, setPageTitle] = React.useState('Active Elections');
+  const [electionClicked, setElectionClicked] = React.useState(0);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location.state);
-  
+  function changePage(election_id){
+    setPage(4);
+    setElectionClicked(election_id);
+    console.log(electionClicked);
+    setPageTitle("Votes Page");
+    console.log("Votes Page Clicked!")
+  }
     React.useEffect(() => {
       if(location.state == null){
         console.log('Error!');
-      navigate("/");
+        navigate("/");
     }
+    // eslint-disable-next-line
     }, []);
-
+    const userData = location.state;
     // Below is code to switch pages
     function switchPages() {
         switch (page) {
             case 0:
-                return <ActiveElections />;
+                return <ActiveElections changePage={changePage}/>;
             case 1:
                 return <AboutCandidates />;
             case 2:
                 return  <PreviousElections />;
             case 3:
-                return <UserProfile />;
+                return <UserProfile userData = {userData}/>;
+            case 4:
+                return <VotesPage props = {electionClicked}/>
             default:
                 return <ActiveElections />;
         }

@@ -26,7 +26,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const borderdata = {borderBottom: 1,borderRight:1, borderColor: 'gray'}
-export default function ActiveElections(){
+
+
+export default function ActiveElections(props){
   const [rows,setRows] =React.useState([])
   React.useEffect(() => {
 
@@ -74,7 +76,7 @@ export default function ActiveElections(){
                 <StyledTableCell align='justify' sx={borderdata}>{row.endDate.split('T')[0]}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.positionName}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.Description}</StyledTableCell>
-                <StyledTableCell align='justify' sx={borderdata}><Link href="/vote">Click here to vote!</Link></StyledTableCell>
+                <StyledTableCell align='justify' sx={borderdata}><Link onClick={() => props.changePage(row.election_id)}>Click here to vote!</Link></StyledTableCell>
               </StyledTableRow>
                         
             ))}

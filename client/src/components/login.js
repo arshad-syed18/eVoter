@@ -62,7 +62,7 @@ export default function Login() {
         Axios.post("http://localhost:3001/api/getUserDetails", e)
         .then((res) => {
         console.log("Congrats, details are here!");
-        navigate("/home")
+        navigate("/home",{state : res.data[0]})
         })
         .catch((err) => {
         if(err.response) {

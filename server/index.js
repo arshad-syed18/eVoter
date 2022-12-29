@@ -101,7 +101,6 @@ app.post('/api/getUserDetails',(req,res) => {
             res.status(404).send("Error!");
         }
         console.log("User Data fetched successfully!");
-        console.log(result)
         res.send(result);
     });
 });

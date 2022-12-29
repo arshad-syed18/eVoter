@@ -1,30 +1,11 @@
 import * as React from 'react';
-import Axios from 'axios';
-import { Box, createTheme, CssBaseline, Divider, Grid, TextField, ThemeProvider, Typography } from '@mui/material';
+import { Box, createTheme, CssBaseline, Grid, ThemeProvider, Typography } from '@mui/material';
 
 
 const theme = createTheme();
 
-export default function UserProfile(){
-    const e = {email: "arshad18syed@gmail.com"};
-    const [userData,setUserData] =React.useState({})
-    React.useEffect(() => {
-
-    Axios.post("http://localhost:3001/api/getUserDetails", e)
-      .then((res) => {
-        console.log("Congrats, details are here!");
-        setUserData(res.data[0]);
-        console.log(userData)
-      })
-      .catch((err) => {
-        if(err.response) {
-          let errorMessage = err.response.data;
-          console.log(errorMessage);
-        }
-      });
-      // eslint-disable-next-line
-    }, []);
-      console.log(userData)
+export default function UserProfile({userData}){
+  console.log(userData)
     return (
         <ThemeProvider theme={theme}>
             <Grid container component="main">
