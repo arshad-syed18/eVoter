@@ -72,8 +72,8 @@ export default function PreviousElections(){
                 <StyledTableCell component="th" scope="row" sx={borderdata}>
                   {row.name}
                 </StyledTableCell>
-                <StyledTableCell align='justify' sx={borderdata}>{row.startDate.split('T')[0]}</StyledTableCell>
-                <StyledTableCell align='justify' sx={borderdata}>{row.endDate.split('T')[0]}</StyledTableCell>
+                <StyledTableCell align='justify' sx={borderdata}>{row.startDate.split('T')[0].split("-").reverse().join("-")}</StyledTableCell>
+                <StyledTableCell align='justify' sx={borderdata}>{row.endDate.split('T')[0].split("-").reverse().join("-")}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.positionName}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.Description}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.victor}</StyledTableCell>

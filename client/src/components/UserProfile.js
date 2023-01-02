@@ -82,7 +82,7 @@ export default function UserProfile({userData}){
               paddingBottom={0.5}
               sx={{ flexGrow: 1 }}
               align="justify">
-                Date Of birth: {userData.DOB.split('T')[0]}
+                Date Of birth: {userData.DOB.split('T')[0].split("-").reverse().join("-")}
             </Typography>
             <Typography
               color="inherit"

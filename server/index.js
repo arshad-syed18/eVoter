@@ -92,17 +92,29 @@ app.get('/api/getCandidates',(req,res) => {
         res.send(result);
     });
 });
-app.post('/api/getVictor',(req,res) => {
-    const candidate_id = req.body.candidate_id;
-    let sqlQuery = "select * from candidate where candidate_id=?";
-    let ans = db.query(sqlQuery,candidate_id, (err,result) => {
+app.post('/api/getElection',(req,res) => {
+    const election_id = req.body.election_id;
+    let sqlQuery = "select * from election where election_id=?";
+    let ans = db.query(sqlQuery,election_id, (err,result)=>{
         if(err!=null){
             console.log(err);
             res.status(404).send("Error!");
         }
-        console.log("Victor Data fetched successfully!");
+        console.log("Vote Election data fetched successfully!");
         res.send(result);
-    });
+    })
+});
+app.post('/api/getElectionCandidates', (req,res) => {
+    const election_id = req.body.election_id;
+    let sqlQuery = "select c.* from candidate c, election e, election_candidates ec where e.election_id= ? and c.candidate_id = ec.candidate_id and e.election_id=ec.election_id and e.currentlyActive=1"
+    db.query(sqlQuery, election_id, (err,result)=>{
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Election Candidate Data successfully fetched!");
+        res.send(result);
+    })
 });
 app.post('/api/getUserDetails',(req,res) => {
     const email = req.body.email;
