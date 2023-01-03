@@ -1,12 +1,34 @@
-import { Box, createTheme, CssBaseline, Grid, ThemeProvider, Typography } from '@mui/material';
+import { Box, CssBaseline, Grid, TableContainer, Typography, Paper, styled, Radio, Button  } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Axios from 'axios';
 import * as React from 'react';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  })); 
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+}));
+const borderdata = {borderBottom: 2,borderRight:2, borderColor: 'gray'}
 
 export default function VotesPage(props){
     const elect = props.props;  // election id of the election clicked
     const e = {election_id : elect};
     const [electionData, setElectionData] = React.useState([]);
-    const [candidateData, setCandidateData] = React.useState({});
+    const [candidateData, setCandidateData] = React.useState([]);
+    const [votedCandidate, setVotedCandidate] = React.useState(null);
     React.useEffect(()=>{
         //getting election details
         Axios.post("http://localhost:3001/api/getElection", e)
@@ -35,23 +57,24 @@ export default function VotesPage(props){
         // eslint-disable-next-line
     }, []);
 
-    const columns = [
-        {field: 'name', headerName: 'Candidate Name'},
-        {field: 'partyName', headerName: 'Party Name'},
-        {field: 'currentPosition', headerName: 'Current Position'},
-        {field: 'introDetails', headerName: 'Introduction'},
-        {field: 'City', headerName: 'City'},
-    ]
-
     console.log(electionData)
     console.log(candidateData[1]) // remove this 
-    const theme = createTheme()
+    console.log(votedCandidate)
+    const handle = (event) =>{
+        event.preventDefault();
+        if(votedCandidate === null){
+            console.log("Voter not selected!");
+            alert('Vote for a candidate please!');
+        }
+        console.log("Voting for %s",votedCandidate)
+    }
 
     return (
-        <ThemeProvider theme={theme}>
             <Grid container component="main">
                 <CssBaseline/>
                 <Box
+                component="form" 
+                onSubmit={handle}
                     sx={{
                         my: 4,
                         mx: 4,
@@ -128,13 +151,52 @@ export default function VotesPage(props){
             align="justify">
                 Below are the list of candidates standing for the elections
             </Typography>
-            {/* <DataGrid>
-
-            </DataGrid> */}
+            
+            
+            <TableContainer component={Paper} sx={{maxHeight: 440}}>
+            <Table stickyHeader sx={{minWidth: 700}} aria-label="VoteElections">
+                <TableHead>
+                    <TableRow>
+                        <StyledTableCell align='justify' sx={borderdata}>Candidate Name</StyledTableCell>
+                        <StyledTableCell align='justify' sx={borderdata}>Representing Party</StyledTableCell>
+                        <StyledTableCell align='justify' sx={borderdata}>Party Symbol</StyledTableCell>
+                        <StyledTableCell align='justify' sx={borderdata}>Current Position</StyledTableCell>
+                        <StyledTableCell align='justify' sx={borderdata}>Introduction</StyledTableCell>
+                        <StyledTableCell align='justify' sx={borderdata}>City</StyledTableCell>
+                        <StyledTableCell align='justify' sx={borderdata}>Vote</StyledTableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {candidateData.map((row)=> (
+                        <StyledTableRow key={row.name} >
+                            <StyledTableCell component="th" scope="row" sx={borderdata}>{row.name}</StyledTableCell>
+                            <StyledTableCell align='justify' sx={borderdata}>{row.partyName}</StyledTableCell>
+                            <StyledTableCell align='center' sx={borderdata}>
+                                <img alt="Icon Load Error" src={row.partyImage} width="80" height="80"/>
+                            </StyledTableCell>
+                            <StyledTableCell align='justify' sx={borderdata}>{row.currentPosition}</StyledTableCell>
+                            <StyledTableCell align='justify' sx={borderdata}>{row.introDetails}</StyledTableCell>
+                            <StyledTableCell align='justify' sx={borderdata}>{row.City}</StyledTableCell>
+                            <StyledTableCell align='justify' sx={borderdata}>
+                                <Radio
+                                checked={votedCandidate === row.candidate_id}
+                                onClick={() =>setVotedCandidate(row.candidate_id)}
+                                />
+                            </StyledTableCell>
+                        </StyledTableRow>
+                ))}
+                </TableBody>
+            </Table>
+            </TableContainer>
+            <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}>
+                Submit
+            </Button>
             </Box>
-            </Grid>
-        </ThemeProvider>
-        
+            </Grid>  
 
     );
 }

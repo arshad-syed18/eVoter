@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { Box, createTheme, CssBaseline, Grid, ThemeProvider, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 
-const theme = createTheme();
 
 export default function UserProfile({userData}){
   console.log(userData)
     return (
-        <ThemeProvider theme={theme}>
             <Grid container component="main">
-                <CssBaseline/>
                 <Box
                     sx={{
                         my: 4,
@@ -95,6 +92,5 @@ export default function UserProfile({userData}){
             </Typography>
           </Box>
             </Grid>
-        </ThemeProvider>
     );
 }

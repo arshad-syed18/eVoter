@@ -76,7 +76,7 @@ export default function ActiveElections(props){
                 <StyledTableCell align='justify' sx={borderdata}>{row.endDate.split('T')[0].split("-").reverse().join("-")}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.positionName}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.Description}</StyledTableCell>
-                <StyledTableCell align='justify' sx={borderdata}><Link onClick={() => props.changePage(row.election_id)}>Click here to vote!</Link></StyledTableCell>
+                <StyledTableCell align='justify' sx={borderdata}><Link color="#3366CC" onClick={() => props.changePage(row.election_id)}>Click here to vote!</Link></StyledTableCell>
               </StyledTableRow>
                         
             ))}

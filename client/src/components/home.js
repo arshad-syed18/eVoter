@@ -28,6 +28,9 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import Logout from '@mui/icons-material/Logout';
 import { useLocation, useNavigate } from 'react-router-dom';
 import VotesPage from './VotesPage';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import { green, grey } from '@mui/material/colors';
+
 
 const drawerWidth = 240;
 
@@ -75,15 +78,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-
-const mdTheme = createTheme();
-
 // Below is the main component for home
 function DashboardContent() {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [pageTitle, setPageTitle] = React.useState('Active Elections');
   const [electionClicked, setElectionClicked] = React.useState(0);
+  const [themeMode, setThemeMode] = React.useState(createTheme({
+    palette: {
+      primary: green,
+      background: {
+        default: grey[400],
+        paper: grey[400],
+      },
+      
+    }
+  }));
+  const [currentTheme, setCurrentTheme] = React.useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   function changePage(election_id){
@@ -122,16 +133,14 @@ function DashboardContent() {
     setOpen(!open);
   };
 
-  // background-image: linear-gradient(0deg, #138808 33%, #ffffff 33%, #ffffff 66%, #FF9933 66% );
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={themeMode}>
+      <CssBaseline />
       <Box sx={{ display: 'flex'}}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open} sx={{background: 'linear-gradient(to bottom right, orange, white, green)'}}>
+        <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
               pr: '24px', // keep right padding when drawer closed
-              color: 'black'
             }}
           >
             <IconButton
@@ -157,7 +166,24 @@ function DashboardContent() {
               {pageTitle}
             </Typography>
             <IconButton
+            onClick={() => { currentTheme ? 
+              setThemeMode(createTheme({ palette: {mode: 'dark'}})) : 
+              setThemeMode(createTheme({palette: {
+                primary: green,
+                background: {
+                  default: grey[400],
+                },
+              }}));
+              setCurrentTheme(!currentTheme);
+              console.log(currentTheme); 
+            }}
+            sx={{paddingRight: 5}}
+            >
+              <DarkModeIcon />
+            </IconButton>
+            <IconButton
             onClick={() => {navigate('/')}}
+            sx={{paddingRight: 5}}
             >
                 <Logout />
             </IconButton>
@@ -209,10 +235,6 @@ function DashboardContent() {
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',

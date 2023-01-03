@@ -59,7 +59,8 @@ export default function AboutCandidates(){
           <TableHead>
             <TableRow>
               <StyledTableCell align='justify' sx={borderdata}>Candidate Name</StyledTableCell>
-              <StyledTableCell align='justify' sx={borderdata}>Party Name</StyledTableCell>
+              <StyledTableCell align='justify' sx={borderdata}>Representing Party</StyledTableCell>
+              <StyledTableCell align='justify' sx={borderdata}>Party Symbol</StyledTableCell>
               <StyledTableCell align='justify' sx={borderdata}>Current Position</StyledTableCell>
               <StyledTableCell align='justify' sx={borderdata}>City</StyledTableCell>
               <StyledTableCell align='justify' sx={borderdata}>Details</StyledTableCell>
@@ -72,6 +73,9 @@ export default function AboutCandidates(){
                   {row.name}
                 </StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.partyName}</StyledTableCell>
+                <StyledTableCell align='center' sx={borderdata}>
+                                <img alt="Icon Load Error" src={row.partyImage} width="80" height="80"/>
+                            </StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.currentPosition}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.City}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.introDetails}</StyledTableCell>
