@@ -45,7 +45,6 @@ app.post('/api/addUser',(req,res) => {
     //query data to sql
     const sqlInsert = "INSERT INTO user (voter_id,name,phoneNumber,email,password,age,DOB,nationality) VALUES (?,?,?,?,?,?,?,?)"
     db.query(sqlInsert,[voter_id,name,phoneNumber, email, password, age, dob, nationality], (err, result) => {
-        console.log(err);
         if(err != null)
         {
             const errorr = handleErrors(err);//if error, get error details and send to front end
@@ -116,6 +115,51 @@ app.post('/api/getElectionCandidates', (req,res) => {
         res.send(result);
     })
 });
+app.post('/api/addVote', (req,res) => {
+    const userData = req.body.userData;
+    const candidateData = req.body.candidateData;
+    const electionData = req.body.electionData;
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+
+    const user_id = userData.voter_id;
+    const election_id= electionData.election_id;
+    const candidate_id= candidateData.candidate_id;
+    const dateOfVote= formattedDate;
+    const electionCurrentlyActive= 1;
+    let sqlQuery = "insert into votes(user_id,candidate_id,election_id,dateOfVote,electionCurrentlyActive) values (?,?,?,?,?)";
+    db.query(sqlQuery,[user_id,candidate_id,election_id,dateOfVote,electionCurrentlyActive], (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send({errorCode : err.errno});
+            
+        }
+        else{
+            console.log("Vote data inserted successfully!");
+            res.status(200).send("Insertion Successful!");
+        }
+        
+    })
+})
+
+app.post('/api/getUserElections', (req,res) => {
+    const user_id = req.body.user_id;
+    console.log(user_id);
+    let sqlQuery = "select election_id from votes where user_id=?"
+    db.query(sqlQuery,user_id, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send({errorCode : err.errno});
+            
+        }
+        else{
+            console.log("Data fetched!");
+            res.send(result);
+        }
+    })
+})
+
+
 app.post('/api/getUserDetails',(req,res) => {
     const email = req.body.email;
     console.log(req.body);

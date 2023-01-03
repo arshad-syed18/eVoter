@@ -27,14 +27,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const borderdata = {borderBottom: 1,borderRight:1, borderColor: 'gray'}
 
+function checkVoteStatus(election_id, userElections){
+  if(userElections.length === 0){return true;}
+  const foundObject = userElections.find((obj) => obj.election_id === election_id);
+  if (foundObject) {return false;}
+  return true;
+}
 
 export default function ActiveElections(props){
-  const [rows,setRows] =React.useState([])
+  const [rows,setRows] =React.useState([]);
+  const [userElections, setUserElections] = React.useState([]);
+  const user_id = props.props.user_id;
   React.useEffect(() => {
 
       Axios.get("http://localhost:3001/api/getActiveElections")
         .then((res) => {
-          console.log(res.data);
           setRows(res.data);
         })
         .catch((err) => {
@@ -43,6 +50,17 @@ export default function ActiveElections(props){
             console.log(errorMessage);
           }
         });
+        Axios.post("http://localhost:3001/api/getUserElections",{user_id:user_id})
+        .then((res) => {
+          setUserElections(res.data);
+        })
+        .catch((err) => {
+          if(err.response) {
+            let errorMessage = err.response.data;
+            console.log(errorMessage);
+          }
+        });
+        // eslint-disable-next-line
   }, []);
   if(rows.length === 0){
     return(
@@ -76,7 +94,14 @@ export default function ActiveElections(props){
                 <StyledTableCell align='justify' sx={borderdata}>{row.endDate.split('T')[0].split("-").reverse().join("-")}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.positionName}</StyledTableCell>
                 <StyledTableCell align='justify' sx={borderdata}>{row.Description}</StyledTableCell>
-                <StyledTableCell align='justify' sx={borderdata}><Link color="#3366CC" onClick={() => props.changePage(row.election_id)}>Click here to vote!</Link></StyledTableCell>
+                <StyledTableCell align='justify' sx={borderdata}>
+                  {checkVoteStatus(row.election_id, userElections) ?
+                    <Link color="#3366CC"
+                   onClick={() => props.props.changePage(row.election_id)}>Click here to vote!
+                   </Link>:
+                   "You have Voted Already!"
+                  }
+                </StyledTableCell>
               </StyledTableRow>
                         
             ))}

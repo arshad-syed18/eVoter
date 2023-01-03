@@ -24,11 +24,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const borderdata = {borderBottom: 2,borderRight:2, borderColor: 'gray'}
 
 export default function VotesPage(props){
-    const elect = props.props;  // election id of the election clicked
+    const elect = props.props.electionClicked;  // election id of the election clicked
+    const userData = props.props.userData;
     const e = {election_id : elect};
     const [electionData, setElectionData] = React.useState([]);
     const [candidateData, setCandidateData] = React.useState([]);
-    const [votedCandidate, setVotedCandidate] = React.useState(null);
+    const [votedCandidate, setVotedCandidate] = React.useState({});
     React.useEffect(()=>{
         //getting election details
         Axios.post("http://localhost:3001/api/getElection", e)
@@ -58,15 +59,44 @@ export default function VotesPage(props){
     }, []);
 
     console.log(electionData)
-    console.log(candidateData[1]) // remove this 
-    console.log(votedCandidate)
+    console.log(candidateData) 
+    console.log(userData);// remove this 
     const handle = (event) =>{
         event.preventDefault();
+        console.log(votedCandidate)
         if(votedCandidate === null){
             console.log("Voter not selected!");
             alert('Vote for a candidate please!');
         }
-        console.log("Voting for %s",votedCandidate)
+        if(votedCandidate != null){
+            console.log("Voting for %s",votedCandidate.name)
+            alert('You have selected the candidate '+ votedCandidate.name)
+            let data = {
+                userData : userData,
+                electionData: electionData,
+                candidateData: votedCandidate
+            }
+            console.log(data);
+            Axios.post("http://localhost:3001/api/addVote",data)
+            .then(()=> {
+                console.log("Successfully Voted!");
+                props.props.changePage()
+            })
+            .catch((err)=>{
+                if(err.response) {
+                    let errorMessage = err.response.data;
+                    console.log(errorMessage);
+                    if(errorMessage.errorCode === 1062){
+                      console.log("Duplicate entry! Voted Already!");
+                      alert('Voted Already!');
+                    }
+                    else{
+                      console.log(errorMessage);
+                    }
+                  }
+            });
+        }
+        
     }
 
     return (
@@ -179,8 +209,8 @@ export default function VotesPage(props){
                             <StyledTableCell align='justify' sx={borderdata}>{row.City}</StyledTableCell>
                             <StyledTableCell align='justify' sx={borderdata}>
                                 <Radio
-                                checked={votedCandidate === row.candidate_id}
-                                onClick={() =>setVotedCandidate(row.candidate_id)}
+                                checked={votedCandidate === row}
+                                onClick={() =>setVotedCandidate(row)}
                                 />
                             </StyledTableCell>
                         </StyledTableRow>

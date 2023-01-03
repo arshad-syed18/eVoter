@@ -104,6 +104,10 @@ function DashboardContent() {
     setPageTitle("Votes Page");
     console.log("Votes Page Clicked!")
   }
+  function voteSuccesss(){
+    setPage(0);
+    alert('Vote cast Successfully!')
+  }
     React.useEffect(() => {
       if(location.state == null){
         console.log('Error!');
@@ -116,7 +120,7 @@ function DashboardContent() {
     function switchPages() {
         switch (page) {
             case 0:
-                return <ActiveElections changePage={changePage}/>;
+                return <ActiveElections props = {{changePage : changePage , user_id: userData.voter_id }}/>;
             case 1:
                 return <AboutCandidates />;
             case 2:
@@ -124,7 +128,7 @@ function DashboardContent() {
             case 3:
                 return <UserProfile userData = {userData}/>;
             case 4:
-                return <VotesPage props = {electionClicked}/>
+                return <VotesPage props = {{changePage : voteSuccesss ,electionClicked: electionClicked, userData: userData}}/>
             default:
                 return <ActiveElections />;
         }
