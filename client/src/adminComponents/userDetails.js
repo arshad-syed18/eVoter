@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { Typography } from '@mui/material';
 
 
 
@@ -32,6 +33,16 @@ export default function UserDetails() {
     console.log(userData)
     return(
         <div style={{ height: 550, width: '100%' }}>
+            <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
+            marginBottom={3}
+            align="justify">
+                Here Are the details of all users currently registered
+            </Typography>
                         <DataGrid 
                         rows={userData} 
                         columns={columns} />

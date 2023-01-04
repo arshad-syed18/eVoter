@@ -17,8 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import BallotIcon from '@mui/icons-material/Ballot';
-import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -27,7 +26,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { green, grey } from '@mui/material/colors';
 import UserDetails from './userDetails';
-
+import AddCandidate from './addCandidate';
 
 const drawerWidth = 240;
 
@@ -102,7 +101,7 @@ function DashboardContent() {
             case 0:
                 return <UserDetails />;
             case 1:
-                return ;
+                return <AddCandidate />;
             case 2:
                 return  ;
             case 3:
@@ -192,17 +191,17 @@ function DashboardContent() {
           <Divider />
           {/*list items here that show in navbar three dash one*/}
           <List component="nav">    
-            <ListItemButton onClick={() => {console.log("Users clicked!");setPage(3);setPageTitle('Current Users');}}>
+            <ListItemButton onClick={() => {console.log("Users clicked!");setPage(0);setPageTitle('Current Users');}}>
                 <ListItemIcon>
                 <AccountCircleIcon />
                 </ListItemIcon>
                 <ListItemText primary="Current Users" />
             </ListItemButton>
-            <ListItemButton onClick={() => {console.log("upcoming Elections clicked!");setPage(5);setPageTitle('Upcoming Elections');}}>
+            <ListItemButton onClick={() => {console.log("Add Candidate clicked!");setPage(1);setPageTitle('Add Candidate');}}>
               <ListItemIcon>
-                <HowToVoteIcon />
+                <PersonAddIcon />
               </ListItemIcon>
-              <ListItemText primary="Upcoming Elections" />
+              <ListItemText primary="Add Candidate" />
             </ListItemButton>
             <ListItemButton onClick={() => {console.log("Previous Elections clicked!");setPage(2);setPageTitle('Previous Elections');}}>
                 <ListItemIcon>

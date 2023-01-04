@@ -208,6 +208,33 @@ app.post('/api/getUser',(req,res) => {
     });
     
 })
+app.post('/api/addCandidate', (req,res) => {
+    const data = req.body;
+    const candidate_id = data.candidate_id;
+    const name = data.name;
+    const currentPos = data.currentPosition;
+    const partyName = data.partyName;
+    const partyImage = data.partyImage;
+    const city = data.City;
+    const intro = data.introDetails;
+    
+    let sqlQuery = "insert into candidate(candidate_id,name,currentPosition,partyName,partyImage,City,introDetails) values(?,?,?,?,?,?,?)";
+    
+    
+    
+    
+    db.query(sqlQuery,[candidate_id,name,currentPos,partyName,partyImage,city,intro], (err,result)=>{
+        if(err!=null){
+            console.log(err);
+            res.status(404).send({errorCode : err.errno});
+            
+        }
+        else{
+            console.log("Candidate Inserted Successfully");
+            res.status(200).send("Candidate Insertion Successful!");
+        }
+    })
+})
 app.get('/api/getUsers', (req,res)=>{
     let sqlQuery = "select * from user"
     db.query(sqlQuery, (err,result)=>{
