@@ -40,7 +40,8 @@ app.post('/api/addUser',(req,res) => {
     const email = req.body.email;
     const password = req.body.password;
     const age = req.body.age;
-    const dob = req.body.DOB;
+    let dob = req.body.DOB;
+    dob = dob.split("/").reverse().join("-")
     const nationality = req.body.nationality;
     //query data to sql
     const sqlInsert = "INSERT INTO user (voter_id,name,phoneNumber,email,password,age,DOB,nationality) VALUES (?,?,?,?,?,?,?,?)"
@@ -206,6 +207,19 @@ app.post('/api/getUser',(req,res) => {
         }
     });
     
+})
+app.get('/api/getUsers', (req,res)=>{
+    let sqlQuery = "select * from user"
+    db.query(sqlQuery, (err,result)=>{
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        else{
+            console.log("Users fetched!");
+            res.send(result);
+        }
+    })
 })
 
 app.get("/",(req,res)=>{
