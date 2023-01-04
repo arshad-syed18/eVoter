@@ -20,8 +20,10 @@ import ListItemText from '@mui/material/ListItemText';
 import ActiveElections from './ActiveElections'
 import AboutCandidates from './AboutCandidates';
 import PreviousElections from './PreviousElections';
+import UpcomingElections from './UpcomingElections';
 import UserProfile from './UserProfile';
 import BallotIcon from '@mui/icons-material/Ballot';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -101,12 +103,13 @@ function DashboardContent() {
     setPage(4);
     setElectionClicked(election_id);
     console.log(electionClicked);
-    setPageTitle("Votes Page");
+    setPageTitle("Vote");
     console.log("Votes Page Clicked!")
   }
   function voteSuccesss(){
     setPage(0);
-    alert('Vote cast Successfully!')
+    alert('Vote cast Successfully!');
+    setPageTitle('Active Elections');
   }
     React.useEffect(() => {
       if(location.state == null){
@@ -120,7 +123,7 @@ function DashboardContent() {
     function switchPages() {
         switch (page) {
             case 0:
-                return <ActiveElections props = {{changePage : changePage , user_id: userData.voter_id }}/>;
+                return <ActiveElections props = {{changePage : changePage, user_id: userData.voter_id }}/>;
             case 1:
                 return <AboutCandidates />;
             case 2:
@@ -129,6 +132,8 @@ function DashboardContent() {
                 return <UserProfile userData = {userData}/>;
             case 4:
                 return <VotesPage props = {{changePage : voteSuccesss ,electionClicked: electionClicked, userData: userData}}/>
+            case 5:
+                return <UpcomingElections />
             default:
                 return <ActiveElections />;
         }
@@ -176,6 +181,7 @@ function DashboardContent() {
                 primary: green,
                 background: {
                   default: grey[400],
+                  paper: grey[400],
                 },
               }}));
               setCurrentTheme(!currentTheme);
@@ -215,17 +221,23 @@ function DashboardContent() {
                 </ListItemIcon>
                 <ListItemText primary="Active Elections" />
             </ListItemButton>
-            <ListItemButton onClick={() => {console.log("About Candidates clicked!");setPage(1);setPageTitle('About Candidates');}}>
-                <ListItemIcon>
-                    <GroupsIcon />
-                </ListItemIcon>
-                <ListItemText primary="About Candidates" />
+            <ListItemButton onClick={() => {console.log("upcoming Elections clicked!");setPage(5);setPageTitle('Upcoming Elections');}}>
+              <ListItemIcon>
+                <HowToVoteIcon />
+              </ListItemIcon>
+              <ListItemText primary="Upcoming Elections" />
             </ListItemButton>
             <ListItemButton onClick={() => {console.log("Previous Elections clicked!");setPage(2);setPageTitle('Previous Elections');}}>
                 <ListItemIcon>
                     <FactCheckIcon />
                 </ListItemIcon>
                 <ListItemText primary="Previous Elections" />
+            </ListItemButton>
+            <ListItemButton onClick={() => {console.log("About Candidates clicked!");setPage(1);setPageTitle('About Candidates');}}>
+                <ListItemIcon>
+                    <GroupsIcon />
+                </ListItemIcon>
+                <ListItemText primary="About Candidates" />
             </ListItemButton>
             <ListItemButton onClick={() => {console.log("User Profile clicked!");setPage(3);setPageTitle('User Profile');}}>
                 <ListItemIcon>

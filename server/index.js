@@ -56,8 +56,8 @@ app.post('/api/addUser',(req,res) => {
 });
 app.get('/api/getActiveElections',(req,res) => {
     var todayDate = new Date().toISOString().slice(0, 10);
-    let sqlQuery = "select * from election where endDate > ?";
-    let ans = db.query(sqlQuery,todayDate, (err,result) => {
+    let sqlQuery = "select * from election where startDate < ? and endDate > ?";
+    let ans = db.query(sqlQuery,[todayDate, todayDate], (err,result) => {
         if(err!=null){
             console.log(err);
             res.status(404).send("Error!");
@@ -68,8 +68,20 @@ app.get('/api/getActiveElections',(req,res) => {
 });
 app.get('/api/getPreviousElections',(req,res) => {
     var todayDate = new Date().toISOString().slice(0, 10);
-    var victors
     let sqlQuery = "select * from election where endDate < ?";
+    let ans = db.query(sqlQuery,todayDate, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Previous Election Data fetched successfully!")
+        //console.log(result);
+        res.send(result);
+    });
+});
+app.get('/api/getUpcomingElections',(req,res) => {
+    var todayDate = new Date().toISOString().slice(0, 10);
+    let sqlQuery = "select * from election where startDate > ?";
     let ans = db.query(sqlQuery,todayDate, (err,result) => {
         if(err!=null){
             console.log(err);
