@@ -53,7 +53,7 @@ export default function Login() {
         email: data.get('email'),
         password: data.get('password')
       }
-      const e = {email: "arshad18syed@gmail.com"};
+      const e = {email: userData.email};
       console.log(userData);
       Axios.post("http://localhost:3001/api/getUser", userData)
       .then((res) => {
@@ -61,9 +61,15 @@ export default function Login() {
         // Get user details then send to home page
         Axios.post("http://localhost:3001/api/getUserDetails", e)
         .then((res) => {
-        console.log("Congrats, details are here!");
-          navigate("/adminDashboard", {state : res.data[0]})
-        // navigate("/home",{state : res.data[0]})
+          console.log("Congrats, details are here!");
+          if(res.data[0].userType === 1){
+            console.log("Welcome Admin!");
+            navigate("/adminDashboard", {state : res.data[0]})
+          }
+          else{
+            console.log("Welcome User!");
+            navigate("/home",{state : res.data[0]})
+          }
         })
         .catch((err) => {
         if(err.response) {
@@ -77,6 +83,9 @@ export default function Login() {
         if(err.response) {
           let errorMessage = err.response.data;
           console.log(errorMessage);
+          if(errorMessage === "user does not exist"){
+            alert('User is not registered!');
+          }
           setPasswordError(true);
         }
       });

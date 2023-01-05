@@ -66,7 +66,10 @@ export default function UserDetails() {
                     City: data.get('City'),
                     introDetails: data.get('intro'),
                 })
-                .then(() => console.log("success"))
+                .then(() => {
+                  console.log("success")
+                  alert('Data Successfully Entered!')
+                })
                 .catch((err)=> {
                     if(err.response.data.errorCode === 1062){
                         alert('duplicate entry!');

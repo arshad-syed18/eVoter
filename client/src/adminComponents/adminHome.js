@@ -18,6 +18,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -27,6 +28,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { green, grey } from '@mui/material/colors';
 import UserDetails from './userDetails';
 import AddCandidate from './addCandidate';
+import PreviousElections from './previousElections';
+import CurrentCandidates from './currentCandidates';
 
 const drawerWidth = 240;
 
@@ -92,6 +95,8 @@ function DashboardContent() {
     }
     // eslint-disable-next-line
     }, []);
+
+    // below is the data of admin
     const userData = location.state;
     console.log(userData);
 
@@ -103,11 +108,11 @@ function DashboardContent() {
             case 1:
                 return <AddCandidate />;
             case 2:
-                return  ;
+                return  <PreviousElections />;
             case 3:
                 return ;
             case 4:
-                return ;
+                return <CurrentCandidates />;
             case 5:
                 return ;
             default:
@@ -197,6 +202,12 @@ function DashboardContent() {
                 </ListItemIcon>
                 <ListItemText primary="Current Users" />
             </ListItemButton>
+            <ListItemButton onClick={() => {console.log("Current Candidates clicked!");setPage(4);setPageTitle('Current Candidates');}}>
+                <ListItemIcon>
+                <GroupsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Current Candidates" />
+            </ListItemButton>
             <ListItemButton onClick={() => {console.log("Add Candidate clicked!");setPage(1);setPageTitle('Add Candidate');}}>
               <ListItemIcon>
                 <PersonAddIcon />
@@ -209,13 +220,13 @@ function DashboardContent() {
                 </ListItemIcon>
                 <ListItemText primary="Previous Elections" />
             </ListItemButton>
-            <ListItemButton onClick={() => {console.log("About Candidates clicked!");setPage(1);setPageTitle('About Candidates');}}>
+            <ListItemButton onClick={() => {console.log("Add Elections clicked!");setPage(3);setPageTitle('Add Elections');}}>
                 <ListItemIcon>
-                    <GroupsIcon />
+                    <LibraryAddIcon />
                 </ListItemIcon>
-                <ListItemText primary="About Candidates" />
+                <ListItemText primary="Add Elections" />
             </ListItemButton>
-            <ListItemButton onClick={() => {console.log("User Profile clicked!");setPage(3);setPageTitle('User Profile');}}>
+            <ListItemButton onClick={() => {console.log("User Profile clicked!");setPage(5);setPageTitle('User Profile');}}>
                 <ListItemIcon>
                     <AccountCircleIcon />
                 </ListItemIcon>
@@ -233,7 +244,8 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container
+           sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               {/* List of elections */}
               <Grid item xs={12}>
@@ -242,6 +254,7 @@ function DashboardContent() {
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
+                    height: 650
                   }}
                 >
                     {/* Below function switches pages based on click input from navbar */}

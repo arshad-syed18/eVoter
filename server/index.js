@@ -196,15 +196,19 @@ app.post('/api/getUser',(req,res) => {
             console.log(err);
             res.status(404).send("Error!");
         }
-        console.log(result);
-        if(result[0].password === password){
-            console.log("Congrats password matches!");
-            res.status(200).send("Password matches!")
+        else if(typeof result[0] === 'undefined'){
+            console.log("No User Found!");
+            res.status(404).send("user does not exist");
         }
         else {
-            console.log("password did not match!");
-            res.status(404).send("Password did not match!")
-        }
+            if(result[0].password === password){
+                console.log("Congrats password matches!");
+                res.status(200).send("Password matches!")
+            }
+            else {
+                console.log("password did not match!");
+                res.status(404).send("Password did not match!")
+            }}
     });
     
 })

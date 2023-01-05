@@ -8,7 +8,6 @@ import ErrorPage from './components/ErrorPage';
 import AdminHome from './adminComponents/adminHome';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 function App() {
-  console.log("Hello world");
   return (
     <div className="App" >
       <Router>

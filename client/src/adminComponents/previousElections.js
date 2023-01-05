@@ -6,27 +6,27 @@ import { Box, Button, Typography } from '@mui/material';
 
 
 const  columns = [
-    { field: 'name', headerName: 'User Name', flex: 2 },
-    { field: 'voter_id', headerName: 'Voter ID', flex: 2 },
-    { field: 'DOB', headerName: 'Date Of Birth', flex: 2 },
-    { field: 'age', headerName: 'Age', flex: 1},
-    { field: 'phoneNumber', headerName: 'Phone Number', flex: 2 },
-    { field: 'email', headerName: 'Email', flex: 3 },
-    { field: 'nationality', headerName: 'Nationality', flex: 1.5 },
-    { field: 'userType', headerName: 'User Type', flex: 2 },
+    { field: 'election_id', headerName: 'Election ID'},
+    { field: 'name', headerName: 'Election Name', flex: 2 },
+    { field: 'startDate', headerName: 'Start Date', flex: 2 },
+    { field: 'endDate', headerName: 'End Date', flex: 2 },
+    { field: 'positionName', headerName: 'For Position', flex: 2},
+    { field: 'Description', headerName: 'Description', flex: 4 },
+    { field: 'victor', headerName: 'Victor', flex: 2 },
   ];
 
 export default function UserDetails() {
     const [userData,setUserData] = React.useState([]);
     const [selectedRows, setSelectedRows] = React.useState([]);
+
     React.useEffect(()=>{
-        Axios.get("http://localhost:3001/api/getUsers")
+        Axios.get("http://localhost:3001/api/getPreviousElections")
         .then((result) => {
             const d = result.data;
             d.forEach((item, i) => {
                 item.id = i + 1;
-                item.DOB = item.DOB.split('T')[0].split("-").reverse().join("-");
-                item.userType = item.userType ? 'Admin' : 'User'
+                item.startDate = item.startDate.split('T')[0].split("-").reverse().join("-")
+                item.endDate = item.endDate.split('T')[0].split("-").reverse().join("-")
             });
             setUserData(d);
         }).catch((err) => {
@@ -38,13 +38,9 @@ export default function UserDetails() {
         const selectedRowsData = ids.map((id) => userData.find((row) => row.id === id));
         setSelectedRows(selectedRowsData);
       };
-      function resetPassword() {
-        console.log("Do reset password later "+selectedRows); // TODO work here ----------------------
-      }
-      function deteleUser() {
-        console.log("Do Delete User later "+selectedRows); // TODO work here ----------------------
-      }
-
+    function removeElection() {
+        console.log("Do remove Election here"+selectedRows); // TODO DOOOOOOO
+    }
     return(
         <div style={{ height: 500, width: '100%' }}>
             <Typography
@@ -55,7 +51,7 @@ export default function UserDetails() {
             sx={{ flexGrow: 1 }}
             marginBottom={3}
             align="justify">
-                Here Are the details of all users currently registered
+                Here Are the details of all the previous elections!
             </Typography>
                         <DataGrid 
                         checkboxSelection
@@ -63,21 +59,15 @@ export default function UserDetails() {
                         columns={columns}
                         getRowHeight={() => 'auto'} 
                         onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}/>
-            <Box
+        <Box
             m={1}
             display="flex"
             alignItems="flex-start">
                 <Button
                 variant="contained"
-                onClick={() => resetPassword()}
-                sx={{ mt: 3, mb: 2, mr: 4 }}>
-                    Reset Password
-                </Button>
-                <Button
-                variant="contained"
-                onClick={() => deteleUser()}
+                onClick={() => removeElection()}
                 sx={{ mt: 3, mb: 2 }}>
-                    Delete User
+                    Remove Election
                 </Button>
             </Box>
         </div>
