@@ -227,12 +227,6 @@ function DashboardContent() {
                 </ListItemIcon>
                 <ListItemText primary="Add Elections" />
             </ListItemButton>
-            <ListItemButton onClick={() => {console.log("User Profile clicked!");setPage(5);setPageTitle('User Profile');}}>
-                <ListItemIcon>
-                    <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText primary="User Profile" />
-            </ListItemButton>
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>
