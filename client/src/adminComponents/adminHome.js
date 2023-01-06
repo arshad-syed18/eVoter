@@ -30,6 +30,7 @@ import UserDetails from './userDetails';
 import AddCandidate from './addCandidate';
 import PreviousElections from './previousElections';
 import CurrentCandidates from './currentCandidates';
+import AddElections from './addElection';
 
 const drawerWidth = 240;
 
@@ -110,7 +111,7 @@ function DashboardContent() {
             case 2:
                 return  <PreviousElections />;
             case 3:
-                return ;
+                return <AddElections />;
             case 4:
                 return <CurrentCandidates />;
             case 5:
@@ -254,7 +255,8 @@ function DashboardContent() {
                     p: 2,
                     display: 'flex',
                     flexDirection: 'column',
-                    height: 650
+                    minHeight: 660,
+                    height: 'auto'
                   }}
                 >
                     {/* Below function switches pages based on click input from navbar */}

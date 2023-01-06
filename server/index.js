@@ -116,6 +116,31 @@ app.post('/api/getElection',(req,res) => {
         res.send(result);
     })
 });
+app.post('/api/addElection', (req,res) => {
+    const name = req.body.name;
+    const startDate = req.body.startDate;
+    const endDate = req.body.endDate;
+    const positionName = req.body.positionName;
+    const description = req.body.description;
+    const candidatesChosen = req.body.candidatesChosen;
+    var currentDate = new Date().toISOString().slice(0, 10);
+    let currentlyActive = 0;
+    if (currentDate >= startDate && currentDate <= endDate) {
+    currentlyActive = 1;
+    } else {
+    currentlyActive = 0;
+    }
+    let sqlQuery = "insert into election(name,startDate,endDate,positionName,Description,currentlyActive) values(?,?,?,?,?,?)";
+    db.query(sqlQuery,[name,startDate,endDate,positionName,description,currentlyActive], (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send(""+err.errno);
+        } else {
+            console.log("Election Data successfully entered!");
+            res.send("Successful!");
+        }
+    })
+})
 app.post('/api/getElectionCandidates', (req,res) => {
     const election_id = req.body.election_id;
     let sqlQuery = "select c.* from candidate c, election e, election_candidates ec where e.election_id= ? and c.candidate_id = ec.candidate_id and e.election_id=ec.election_id and e.currentlyActive=1"
