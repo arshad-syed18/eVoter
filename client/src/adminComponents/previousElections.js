@@ -39,7 +39,23 @@ export default function UserDetails() {
         setSelectedRows(selectedRowsData);
       };
     function removeElection() {
-        console.log("Do remove Election here"+selectedRows); // TODO DOOOOOOO
+        const electionIds = selectedRows.map(election => election.election_id);
+        if(electionIds.length === 0){
+            alert('select the election please!');
+            return;
+        }
+        let a = {election_id: electionIds};
+        if(window.confirm("Delete elections?")){
+          Axios.post("http://localhost:3001/api/deletePreviousElection", a)
+          .then((result) => {
+            if(result.data === true)
+              alert('Election deleted successfully')
+            setSelectedRows([]);
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+      }
     }
     return(
         <div style={{ height: 500, width: '100%' }}>

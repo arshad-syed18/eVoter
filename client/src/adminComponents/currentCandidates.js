@@ -56,12 +56,18 @@ export default function UserDetails() {
         });
     }, []);
       function removeCandidate() {
-        console.log("Do remove candidate later "); // TODO work here ----------------------
-        console.log(selectedIds)
+        let a = {candidate_id: selectedIds};
+        if(window.confirm("Delete candidate?")){
+          Axios.post("http://localhost:3001/api/deleteCandidate", a)
+          .then((result) => {
+            if(result.data === true)
+              alert('candidate deleted successfully')
+            setSelectedIds([]);
+          })
+          .catch((err) => {
+              console.log(err);
+          });
       }
-      function updateCandidate() {
-        console.log("Do update candidate later "); // TODO work here ----------------------
-        console.log(selectedIds)
       }
 
     return(
@@ -125,12 +131,6 @@ export default function UserDetails() {
                 onClick={() => removeCandidate()}
                 sx={{ mt: 3, mb: 2, mr: 4 }}>
                     Remove Candidate
-                </Button>
-                <Button
-                variant="contained"
-                onClick={() => updateCandidate()}
-                sx={{ mt: 3, mb: 2 }}>
-                    Update Candidate
                 </Button>
             </Box>
         </div>

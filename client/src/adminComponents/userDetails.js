@@ -55,6 +55,10 @@ export default function UserDetails() {
             let a = {voter_id: row.voter_id};
             if(window.confirm("Delete user?")){
                 Axios.post("http://localhost:3001/api/deleteUser", a)
+                .then((result) => {
+                    if(result.data === true)
+                      alert('candidate deleted successfully');
+                  })
                 .catch((err) => {
                     console.log(err);
                 });

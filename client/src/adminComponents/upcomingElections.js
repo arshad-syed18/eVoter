@@ -11,6 +11,7 @@ import Collapse from '@mui/material/Collapse';
 export default function UpcomingElections () {
     const [userData,setUserData] = React.useState([]);
     const [selectedRows, setSelectedRows] = React.useState([]);
+    // eslint-disable-next-line
     const [candidateData, setCandidateData] = React.useState([]);
     const [selectedIds, setSelectedIds] = React.useState([]);
     React.useEffect(()=>{
@@ -42,7 +43,7 @@ export default function UpcomingElections () {
     
     const RenderList = (props) => {
         let a = props.row;
-        let b=a.candidatesData;
+        let b = typeof a.candidatesData !== 'undefined' ? a.candidatesData : [];
         const [open, setOpen] = React.useState(true);
 
     const handleClick = () => {
@@ -97,10 +98,47 @@ export default function UpcomingElections () {
       };
       function removeElection(){
         console.log("do remove election");
-        console.log(selectedRows,candidateData);
+        const electionIds = selectedRows.map(election => election.election_id);
+        if(electionIds.length === 0){
+            alert('select the election please!');
+            return;
+        }
+        let a = {election_id: electionIds};
+        if(window.confirm("Delete elections?")){
+          Axios.post("http://localhost:3001/api/deletePreviousElection", a)
+          .then((result) => {
+            if(result.data === true)
+              alert('Election deleted successfully')
+            setSelectedRows([]);
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+      }
       }
       function removeCandidate() {
-        console.log(selectedIds, selectedRows[0].election_id);
+        const electionIds = selectedRows.map(election => election.election_id);
+        if(electionIds.length === 0){
+            alert('select the election please!');
+            return;
+        }
+        if(selectedIds.length === 0){
+            alert('select the candidates please!');
+            return;
+        }
+        let a = {election_id: electionIds, candidate_id: selectedIds};
+        if(window.confirm("Delete candidates?")){
+          Axios.post("http://localhost:3001/api/deleteCandidatesFromElection", a)
+          .then((result) => {
+            if(result.data === true)
+              alert('Election deleted successfully')
+            setSelectedRows([]);
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+      }
+        
       }
 
     return(

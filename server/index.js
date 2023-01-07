@@ -125,6 +125,43 @@ app.post('/api/deleteUser', (req,res) => {
         res.send(true);
     })
 })
+app.post('/api/deleteCandidate', (req,res) => {
+    let candidate_id=req.body.candidate_id;
+    let sqlQuery = "delete from candidate where candidate_id in (?)";
+    db.query(sqlQuery,candidate_id, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("User deleted successfully!");
+        res.send(true);
+    })
+})
+app.post('/api/deletePreviousElection', (req,res) => {
+    let voter_id=req.body.election_id;
+    let sqlQuery = "delete from election where election_id in (?)";
+    db.query(sqlQuery,voter_id, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Election deleted successfully!");
+        res.send(true);
+    })
+})
+app.post('/api/deleteCandidatesFromElection', (req,res) => {
+    let election_id=req.body.election_id;
+    let candidate_id=req.body.candidate_id;
+    let sqlQuery = "delete from election_candidates where election_id in (?) and candidate_id in (?)";
+    db.query(sqlQuery,[election_id,candidate_id], (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Candidate deleted successfully!");
+        res.send(true);
+    })
+})
 app.post('/api/getUserPassword', (req,res) => {
     let voter_id=req.body.voter_id;
     let sqlQuery = "select email,password from user where voter_id=?";
