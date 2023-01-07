@@ -30,7 +30,10 @@ import UserDetails from './userDetails';
 import AddCandidate from './addCandidate';
 import PreviousElections from './previousElections';
 import CurrentCandidates from './currentCandidates';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import AddElections from './addElection';
+import UpcomingElections from './upcomingElections';
+
 
 const drawerWidth = 240;
 
@@ -115,9 +118,9 @@ function DashboardContent() {
             case 4:
                 return <CurrentCandidates />;
             case 5:
-                return ;
+                return <UpcomingElections />;
             default:
-                return ;
+                return <UserDetails />;
         }
     }
   const toggleDrawer = () => {
@@ -220,6 +223,12 @@ function DashboardContent() {
                     <FactCheckIcon />
                 </ListItemIcon>
                 <ListItemText primary="Previous Elections" />
+            </ListItemButton>
+            <ListItemButton onClick={() => {console.log("upcoming Elections clicked!");setPage(5);setPageTitle('Upcoming Elections');}}>
+              <ListItemIcon>
+                <HowToVoteIcon />
+              </ListItemIcon>
+              <ListItemText primary="Upcoming Elections" />
             </ListItemButton>
             <ListItemButton onClick={() => {console.log("Add Elections clicked!");setPage(3);setPageTitle('Add Elections');}}>
                 <ListItemIcon>

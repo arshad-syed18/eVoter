@@ -2,6 +2,7 @@ import express from 'express'
 import mysql from 'mysql'
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import nodemailer from 'nodemailer';
 
 const app = express()
 //define database values
@@ -15,6 +16,14 @@ const db = mysql.createConnection({
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+let mailTransporter = nodemailer.createTransport({
+    service: "gmail",
+    auth:{
+        user: "evoter.noreply@gmail.com",
+        pass: 'jtemhmffvldlhepb'
+    }
+})
 
 const handleErrors = (err) => {
     let errors = {errno: err.errno, code: err.code};
@@ -104,6 +113,41 @@ app.get('/api/getCandidates',(req,res) => {
         res.send(result);
     });
 });
+app.post('/api/deleteUser', (req,res) => {
+    let voter_id=req.body.voter_id;
+    let sqlQuery = "delete from user where voter_id=?";
+    db.query(sqlQuery,voter_id, (err,result) => {
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("User deleted successfully!");
+        res.send(true);
+    })
+})
+app.post('/api/getUserPassword', (req,res) => {
+    let voter_id=req.body.voter_id;
+    let sqlQuery = "select email,password from user where voter_id=?";
+    let ans = db.query(sqlQuery,[voter_id],(err,result)=>{
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        let details = {
+            from: "fallenone189@gmail.com",
+            to: result[0].email,
+            subject: 'eVoter password',
+            text: 'The password for your eVoter account is as follows : '+result[0].password
+        }
+        mailTransporter.sendMail(details, (err)=>{
+            if(err)
+                console.log(err);
+            else 
+                console.log("Password sent!")
+        })
+        res.send("Passwords have been sent to the users email account");
+    });
+});
 app.post('/api/getElection',(req,res) => {
     const election_id = req.body.election_id;
     let sqlQuery = "select * from election where election_id=?";
@@ -144,6 +188,18 @@ app.post('/api/addElection', (req,res) => {
 app.post('/api/getElectionCandidates', (req,res) => {
     const election_id = req.body.election_id;
     let sqlQuery = "select c.* from candidate c, election e, election_candidates ec where e.election_id= ? and c.candidate_id = ec.candidate_id and e.election_id=ec.election_id and e.currentlyActive=1"
+    db.query(sqlQuery, election_id, (err,result)=>{
+        if(err!=null){
+            console.log(err);
+            res.status(404).send("Error!");
+        }
+        console.log("Election Candidate Data successfully fetched!");
+        res.send(result);
+    })
+});
+app.post('/api/getInactiveElectionCandidates', (req,res) => {
+    const election_id = req.body.election_id;
+    let sqlQuery = "select c.* from candidate c, election e, election_candidates ec where e.election_id= ? and c.candidate_id = ec.candidate_id and e.election_id=ec.election_id"
     db.query(sqlQuery, election_id, (err,result)=>{
         if(err!=null){
             console.log(err);

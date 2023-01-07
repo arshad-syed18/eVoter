@@ -36,13 +36,30 @@ export default function UserDetails() {
 
     const onRowsSelectionHandler = (ids) => {
         const selectedRowsData = ids.map((id) => userData.find((row) => row.id === id));
+        console.log(selectedRowsData);
         setSelectedRows(selectedRowsData);
       };
       function resetPassword() {
-        console.log("Do reset password later "+selectedRows); // TODO work here ----------------------
+        selectedRows.forEach((row) => {
+            let as = {voter_id: row.voter_id};
+            Axios.post("http://localhost:3001/api/getUserPassword", as)
+            .catch((err) => {
+                console.log(err);
+            });
+            alert('Passwords have been sent to users email')
+
+        })
       }
       function deteleUser() {
-        console.log("Do Delete User later "+selectedRows); // TODO work here ----------------------
+        selectedRows.forEach(row => {
+            let a = {voter_id: row.voter_id};
+            if(window.confirm("Delete user?")){
+                Axios.post("http://localhost:3001/api/deleteUser", a)
+                .catch((err) => {
+                    console.log(err);
+                });
+            }
+        });
       }
 
     return(
