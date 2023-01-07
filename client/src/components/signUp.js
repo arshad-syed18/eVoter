@@ -37,7 +37,7 @@ let flag = false; // Flag used to check if everything is validated
 function validateEmail(email){
   var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   if (email.match(validRegex)) { return false;} 
-  else {flag=true; return true;}
+  else { return true;}
  }
 function validateName(name){
   if(name === '' || name.length<3){return true;}
@@ -130,6 +130,7 @@ export default function SignUp() {
     errorCheck(data);
     //TODO add error checking here and then push to node js
     // Axios.post()
+    console.log(flag);
     if(flag === true){
       let userData = {
         voter_id: data.get('voterID'),
