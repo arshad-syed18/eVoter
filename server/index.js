@@ -39,7 +39,81 @@ db.connect((err)=>{
         throw err;
     }
     console.log("Connection to database established!");
+    updateActiveStatus()
+    calculateResults()
+    calculateWinners()
+    console.log('Done with calling procedures!');
 });
+
+function calculateWinners() {
+    // Get all elections
+    let sqlQuery = "SELECT DISTINCT election_id FROM results";
+    db.query(sqlQuery, (err, elections) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // Call stored procedure for each election
+        elections.forEach((election) => {
+          let sqlQuery = "CALL calculate_winner(?)";
+          let params = [election.election_id];
+          db.query(sqlQuery, params, (err, result) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        });
+      }
+    });
+    db.query("call update_election_victor()",(err, result) => {
+        if (err) {
+            console.log(err);
+          }
+    })
+  }
+  
+
+function calculateResults(){
+    let sqlQuery = "SELECT ec.election_id, ec.candidate_id FROM election_candidates ec INNER JOIN election e ON ec.election_id = e.election_id WHERE e.endDate < CURDATE()";
+    db.query(sqlQuery, (err,result) => {
+        if (err) {
+            console.log(err);
+            return;
+          }
+          // Call the calculate_results stored procedure for each election_id and candidate_id
+          result.forEach(row => {
+            const election_id = row.election_id;
+            const candidate_id = row.candidate_id;
+            db.query('CALL calculate_results(?, ?)', [election_id, candidate_id], (error, results) => {
+              if (error) {
+                return;
+              }
+            });
+          });
+    })
+}
+
+function updateActiveStatus() {
+    // get elections details
+    let sqlQuery = "SELECT election_id, startDate, endDate FROM election";
+    db.query(sqlQuery, (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            result.forEach((row) => {
+                let {election_id, startDate, endDate} = row;
+                db.query("CALL update_active_status(?)", [election_id], (error, res) => {
+                    if(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        }
+    });
+}
+
+
+
 
 app.post('/api/addUser',(req,res) => {
     // get data from frontend
@@ -376,74 +450,6 @@ app.get("/",(req,res)=>{
 });
 
 app.listen(3001, () => {
-    console.log("Server is running on port 3001")
+    console.log("Server is running on port 3001");
+
 })
-
-
-
-
-//create database
-// app.get("/createddb",(req,res)=>{
-//     let sql="create database testdatabase";
-//     db.query(sql,(err)=>{
-//         if(err)
-//             throw err;
-//         console.log("database created");
-//     });
-// });
-//create table
-// app.get("/createtable",(req,res)=>{
-//     let sql=(`
-//     create table user(
-//         userid int primary key,
-//         userName varchar(20),
-//         userEmail varchar(20),
-//         userPassword varchar(20));
-//     `);
-//     db.query(sql,(err,result)=>{
-//         if(err)
-//             throw err;
-//         console.log("Table created");
-//     });
-// });
-//update row get userid from user
-// app.get("/updaterow/:id",(req,res)=>{
-//     let newName="Syed Arshad";
-//     let sql=`update user set userName ='${newName}' where userid='${req.params.id};'`;
-//     let query=db.query(sql,(err,result)=>{
-//         if(err)
-//             throw err;
-//     console.log(result);
-//     res.send("Row updated!")
-//     });
-    
-// });
-//add row
-// app.get("/addrow",(req,res)=>{
-//     let values={
-//         userid: 110,
-//         userName: "Syed",
-//         userEmail: "email@gogle.com",
-//         userPassword: "syed123"
-//     };
-//     let sql="insert into user set ?";
-//     let query=db.query(sql,values,(err)=>{
-//         if(err)
-//             throw err;
-//         console.log("Data evtered");
-//     });
-    
-// });
-// //select post
-// app.get("/getrows",(req,res)=>{
-//     let sql="select * from user;";
-//     let query=db.query(sql,(err,result)=>{
-//         if(err)
-//             throw err;
-//         console.log(result);
-//         //get single attribute 
-//         //console.log(result[0].userName);
-//         res.send("data fetched");
-//     });
-    
-// });
