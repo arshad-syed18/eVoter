@@ -66,7 +66,7 @@ function calculateWinners() {
     });
     db.query("call update_election_victor()",(err, result) => {
         if (err) {
-            console.log(err);
+            console.log();
           }
     })
   }
@@ -280,19 +280,41 @@ app.post('/api/addElection', (req,res) => {
     const candidatesChosen = req.body.candidatesChosen;
     var currentDate = new Date().toISOString().slice(0, 10);
     let currentlyActive = 0;
+    let election_id;
     if (currentDate >= startDate && currentDate <= endDate) {
     currentlyActive = 1;
     } else {
     currentlyActive = 0;
     }
     let sqlQuery = "insert into election(name,startDate,endDate,positionName,Description,currentlyActive) values(?,?,?,?,?,?)";
-    db.query(sqlQuery,[name,startDate,endDate,positionName,description,currentlyActive], (err,result) => {
+    db.query(sqlQuery,[name,startDate,endDate,positionName,description,currentlyActive], (err) => {
         if(err!=null){
             console.log(err);
             res.status(404).send(""+err.errno);
         } else {
             console.log("Election Data successfully entered!");
-            res.send("Successful!");
+            db.query('select election_id from election where name=? and startDate=? and endDate=?', 
+                [name,startDate,endDate], (error,result) => {
+                    if(err!=null){
+                        console.log(error);
+                        res.send(""+err.errno);
+                    }
+                    else{
+                        election_id = result[0].election_id;
+                        candidatesChosen.forEach(elem => {
+                            db.query('insert into election_candidates values(?,?)',[election_id,elem], (e,r) => {
+                                if(e){
+                                    console.log(e);
+                                } else {
+                                    console.log("inserted "+elem+" candidate");
+                                }
+                            });
+                        });
+                        console.log("All Done!");
+                        res.send("Successful!");
+                    }
+                })
+            
         }
     })
 })

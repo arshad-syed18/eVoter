@@ -111,6 +111,7 @@ export default function VotesPage(props){
                         display: 'block',
                         flexDirection: 'column-reverse',
                         alignItems: 'left',
+                        maxWidth: 1000
                 }}
           >
             <Typography
@@ -146,7 +147,8 @@ export default function VotesPage(props){
             </Typography>
             <Typography
             color="inherit"
-            noWrap
+            noWrap={false}
+            mult
             fontSize={17}
             paddingBottom={0.5}
             sx={{ flexGrow: 1 }}
@@ -183,7 +185,7 @@ export default function VotesPage(props){
             </Typography>
             
             
-            <TableContainer component={Paper} sx={{maxHeight: 440}}>
+            <TableContainer component={Paper} sx={{maxHeight: 440, maxWidth: 1000}}>
             <Table stickyHeader sx={{minWidth: 700}} aria-label="VoteElections">
                 <TableHead>
                     <TableRow>
